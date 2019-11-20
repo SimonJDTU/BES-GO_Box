@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.SparseArray;
@@ -28,6 +29,8 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
+
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    askPermission();
-                    return;
+                if(!(Build.VERSION.SDK_INT <= LOLLIPOP)) {
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        askPermission();
+                        return;
+                    }
                 }
                 try {
                     cameraSrc.start(holder);
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     loginInfo.post(() -> {
                         if (timeAllowedBetweenScans()) {
                             scanTime = System.currentTimeMillis();
-                            if (qrRegex(qrCodes.valueAt(0).displayValue)) {
+                            if (true/*qrRegex(qrCodes.valueAt(0).displayValue)*/) {
 
                                 vibe.vibrate(200);
                                 //TODO: Refractor activityname "nextActivity" to something more appropriate
