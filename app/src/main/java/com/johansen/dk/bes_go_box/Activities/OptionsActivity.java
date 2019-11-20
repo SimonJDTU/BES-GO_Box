@@ -1,14 +1,16 @@
-package com.johansen.dk.bes_go_box;
+package com.johansen.dk.bes_go_box.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class NextActivity extends AppCompatActivity {
+import com.johansen.dk.bes_go_box.R;
+
+public class OptionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_next);
+        setContentView(R.layout.activity_overview);
     }
 }

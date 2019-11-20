@@ -1,17 +1,18 @@
-package com.johansen.dk.bes_go_box;
+package com.johansen.dk.bes_go_box.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.webkit.PermissionRequest;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.johansen.dk.bes_go_box.R;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -28,22 +30,20 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
+public class GiveActivity extends AppCompatActivity {
+
+    private long scanTime = 0;
     private SurfaceView cameraPreview;
     private CameraSource cameraSrc;
     private BarcodeDetector barcodeDetector;
-    private TextView loginInfo;
     private Vibrator vibe;
-
-    private long scanTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        loginInfo = findViewById(R.id.informationText);
+        setContentView(R.layout.activity_give);
 
         cameraPreview = findViewById(R.id.cameraPreview);
         barcodeDetector = new BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.QR_CODE).build();
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAutoFocusEnabled(true)
                 .build();
 
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
 
@@ -60,15 +61,11 @@ public class MainActivity extends AppCompatActivity {
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    askPermission();
-                    return;
-                }
                 try {
                     cameraSrc.start(holder);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(getBaseContext(),"Couldn't create QR-scanner, please reopen app",Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -91,22 +88,19 @@ public class MainActivity extends AppCompatActivity {
                 SparseArray<Barcode> qrCodes = detections.getDetectedItems();
 
                 if (qrCodes.size() != 0) {
-                    loginInfo.post(() -> {
                         if (timeAllowedBetweenScans()) {
                             scanTime = System.currentTimeMillis();
-                            if (qrRegex(qrCodes.valueAt(0).displayValue)) {
-
+                            if (true/*qrRegex(qrCodes.valueAt(0).displayValue)*/) {
                                 vibe.vibrate(200);
-                                //TODO: Refractor activityname "nextActivity" to something more appropriate
-                                Intent intent = new Intent(MainActivity.this, NextActivity.class);
-                                //intent.putExtra("roomNo", qrCodes.valueAt(0).displayValue);
-                                startActivity(intent);
+
+                                //TODO: what on success?
+
                             } else {
-                                Toast.makeText(getApplicationContext(),"Couldn't recognize QR-code, try again", Toast.LENGTH_SHORT).show();
+                                //TODO: what on failure?
+
                             }
 
                         }
-                    });
                 }
             }
         });
@@ -115,34 +109,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean timeAllowedBetweenScans() {
         long currentTime = System.currentTimeMillis();
         return currentTime - scanTime > 3000;
-    }
-
-
-    // Must be done during an initialization phase like onCreate
-    private void askPermission() {
-        Dexter.withActivity(this)
-                .withPermission(Manifest.permission.CAMERA)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        recreate();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        if(response.isPermanentlyDenied()) {
-                            //TODO: Handle denial efficiently
-                        } else{
-
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(com.karumi.dexter.listener.PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-
-                }).check();
     }
 
     private boolean qrRegex(String codeString) {
@@ -165,5 +131,11 @@ public class MainActivity extends AppCompatActivity {
         final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
         return PASSWORD_PATTERN.matcher(codeString).matches();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createQRscan();
     }
 }
