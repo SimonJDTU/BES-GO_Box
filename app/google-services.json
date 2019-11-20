@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "222285846356-84h8sdnvqq92es10d30ivv9era0iker1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.johansen.dk.bes_go_box",
+            "certificate_hash": "da07c4c4daaf78f61d6577643ac2c5ba4d2361fc"
+          }
+        },
+        {
           "client_id": "222285846356-g8h0eikei12337oqtr3v58uqn15lrlur.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
