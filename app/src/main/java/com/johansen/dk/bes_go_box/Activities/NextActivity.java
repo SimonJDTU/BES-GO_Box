@@ -36,14 +36,14 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
 
         switch(v.getId()){
             case R.id.overview:
-                Intent overviewIntent = new Intent(this, OverviewActivity.class);
+                Intent overviewIntent = new Intent(this, OptionsActivity.class);
                 overviewIntent.putExtra("QRvalue", QRvalue);
                 startActivity(overviewIntent);
                 break;
             case R.id.give:
                 break;
             case R.id.recieve:
-                Intent recieveIntent = new Intent(this, OverviewActivity.class);
+                Intent recieveIntent = new Intent(this, OptionsActivity.class);
                 recieveIntent.putExtra("QRvalue", QRvalue);
                 startActivity(recieveIntent);
                 break;

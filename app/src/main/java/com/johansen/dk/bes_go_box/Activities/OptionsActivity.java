@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.johansen.dk.bes_go_box.R;
 
-public class OverviewActivity extends AppCompatActivity {
+public class OptionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
