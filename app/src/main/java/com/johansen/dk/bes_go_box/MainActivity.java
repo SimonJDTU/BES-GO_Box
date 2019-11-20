@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAutoFocusEnabled(true)
                 .build();
 
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
 
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     askPermission();
                     return;
@@ -165,5 +166,11 @@ public class MainActivity extends AppCompatActivity {
         final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
         return PASSWORD_PATTERN.matcher(codeString).matches();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createQRscan();
     }
 }
