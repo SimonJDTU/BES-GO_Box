@@ -20,6 +20,8 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.johansen.dk.bes_go_box.R;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
+
 
 
     private void createQRscan() {
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                                 vibe.vibrate(200);
                                 //TODO: Refractor activityname "nextActivity" to something more appropriate
                                 Intent intent = new Intent(MainActivity.this, NextActivity.class);
-                                //intent.putExtra("roomNo", qrCodes.valueAt(0).displayValue);
+                                intent.putExtra("QRvalue", qrCodes.valueAt(0).displayValue);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplicationContext(),"Couldn't recognize QR-code, try again", Toast.LENGTH_SHORT).show();
