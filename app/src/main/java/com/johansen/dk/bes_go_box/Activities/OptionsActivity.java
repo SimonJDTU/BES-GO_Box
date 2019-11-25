@@ -23,9 +23,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         QRvalue = getIntent().getStringExtra("QRvalue");
 
 
-        overview = (Button) findViewById(R.id.overview);
-        give = (Button) findViewById(R.id.give);
-        recieve = (Button) findViewById(R.id.recieve);
+        overview = (Button) findViewById(R.id.overviewBtn);
+        give = (Button) findViewById(R.id.giveBtn);
+        recieve = (Button) findViewById(R.id.recieveBtn);
 
         recieve.setOnClickListener(this);
 
@@ -35,14 +35,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
 
         switch(v.getId()){
-            case R.id.overview:
+            case R.id.overviewBtn:
                 Intent overviewIntent = new Intent(this, OverviewActivity.class);
                 overviewIntent.putExtra("QRvalue", QRvalue);
                 startActivity(overviewIntent);
                 break;
-            case R.id.give:
+            case R.id.giveBtn:
                 break;
-            case R.id.recieve:
+            case R.id.recieveBtn:
                 Intent recieveIntent = new Intent(this, RecieveActivity.class);
                 recieveIntent.putExtra("QRvalue", QRvalue);
                 startActivity(recieveIntent);

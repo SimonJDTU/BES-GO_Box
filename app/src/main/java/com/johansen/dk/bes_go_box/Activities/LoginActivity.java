@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
     private TextView eMail,password;
     private Button login, register;
+    private ImageButton hackBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
         register = (Button) findViewById(R.id.main_register);
         register.setOnClickListener(this);
+        hackBtn = (ImageButton) findViewById(R.id.hackButton);
+        hackBtn.setOnClickListener(this);
 
     }
 
@@ -91,6 +97,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     signInUser();
                 break;
             case R.id.main_register:
+                break;
+            case R.id.hackButton:
+                startActivity(new Intent(this,OptionsActivity.class));
                 break;
                 default:
                     Toast.makeText(this,"DEFAULT HIT IN ONCLICK SWITCH",Toast.LENGTH_SHORT).show();
